@@ -2,7 +2,7 @@
 
 > Tool for rebasing / merging a chain of local git branches.
 >
-> *Note: This version is a fork of the original that supports `merge` (as well as the standard `rebase`) as a strategy.*
+> _Note: This version is a fork of the original that supports `merge` (as well as the standard `rebase`) as a strategy._
 
 # Motivation
 
@@ -16,15 +16,15 @@ Suppose you have branches, each depending on a parent branch (usually called "st
     A---B---C---D  master
 ```
 
-Pulling in new changes on the `master` branch, and then rebasing `feature-1` and `feature-2` on top of `master` can be tedious to do.
+Pulling in new changes on the `master` branch, and then merging/rebasing `feature-1` and `feature-2` on top of `master` can be tedious to do.
 
-With `git-chain`, you can automate the rebasing steps by setting up the chain `feature-1` and `feature-2` with `master` as the root branch:
+With `git-chain`, you can automate the merging/rebasing steps by setting up the chain `feature-1` and `feature-2` with `master` as the root branch:
 
 1. `git chain setup big-feature master feature-1 feature-2`
 2. `git checkout feature-2` (switch into any branch of the `big-feature` chain)
-3. `git chain rebase`
+3. `git chain merge` or `git chain rebase` (depending on your desired strategy)
 
-`git-chain` can also rebase all the branches of the chain if you add commits in any branch in the chain:
+`git-chain` can also merge or rebase all the branches of the chain if you add commits in any branch in the chain:
 
 ```
                             J---K---L  feature-2
@@ -51,7 +51,7 @@ The "chain" as defined can also be called "stacked branches" in other tools. See
 
 ## Rebase strategy
 
-`git chain` will rebase branches of the chain in the order that they are defined. For each branch, a _fork-point_ is generated with `git merge-base --fork-point` between the branch and the branch's parent (its dependency). The parent of the first branch of the chain is the root branch.
+`git chain` will merge or rebase branches of the chain in the order that they are defined. For rebase, for each branch, a _fork-point_ is generated with `git merge-base --fork-point` between the branch and the branch's parent (its dependency). The parent of the first branch of the chain is the root branch.
 
 The rebase is applied in the following way for each branch:
 
@@ -103,10 +103,18 @@ git chain list
 # If the backup branch already exists, then it is replaced.
 git chain backup
 
+# Merge all branches on the chain
+git chain merge
+
+# Merge all branches, except don't merge the root (usually main/master)
+git chain merge --ignore-root
+
 # Rebase all branches on the chain.
 git chain rebase
 # Run at most one rebase that will perform a history rewrite.
 git chain rebase --step
+# Rebase all branches on the chain, except don't rebase from the root (usually main/master)
+git chain rebase --ignore-root
 
 # Push all branches on the current chain to their upstreams.
 # Note: this is not a force push!
