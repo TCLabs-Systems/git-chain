@@ -1,6 +1,8 @@
 # git-chain
 
-> Tool for rebasing a chain of local git branches.
+> Tool for rebasing / merging a chain of local git branches.
+>
+> *Note: This version is a fork of the original that supports `merge` (as well as the standard `rebase`) as a strategy.
 
 # Motivation
 
